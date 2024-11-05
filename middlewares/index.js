@@ -9,15 +9,6 @@ const authenticateToken = (req, res, next) => {
         return res.status(401).json({ message: 'Token does not exist' });
     }
 
-    // jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
-    //     if (err) {
-    //         return res.status(403).json({ message: 'Token incorrect!' });
-    //     }
-
-    //     req.user = user;
-    //     next();
-    // });
-
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
 

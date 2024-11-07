@@ -6,6 +6,7 @@ import customTrainingsRoutes from '../server/routes/customTrainingsRoutes.route.
 import trainingRecordRoutes from '../server/routes/trainingRecord.route.js'
 import userRoutes from '../server/routes/user.route.js'
 import feedbackRoutes from '../server/routes/feedback.route.js'
+import feedRoutes from '../server/routes/feed.route.js'
 import cors from 'cors'
 import { connectDb } from './libs/db.js';
 import { connectDbMySql } from './libs/mysqldb.js'
@@ -25,6 +26,7 @@ app.use('/api/customtrainings', customTrainingsRoutes)
 app.use('/api/trainingrecord', trainingRecordRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/feedback', feedbackRoutes)
+app.use('/api/feed', feedRoutes)
 
 app.listen(PORT, async () => {
     await connectDb()

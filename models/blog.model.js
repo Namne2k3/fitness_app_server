@@ -14,7 +14,7 @@ const BlogSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    media: {
+    medias: {
         type: [
             {
                 url: String,
@@ -37,7 +37,11 @@ const BlogSchema = new mongoose.Schema({
             ref: 'Comment',
             default: []
         }
-    ]
+    ],
+    allowComment: {
+        type: Boolean,
+        default: true
+    }
 }, schemaOptions);
 
 const Blog = mongoose.model('Blog', BlogSchema);

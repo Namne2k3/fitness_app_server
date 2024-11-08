@@ -17,11 +17,8 @@ const BlogSchema = new mongoose.Schema({
     medias: {
         type: [
             {
-                url: String,
-                type: {
-                    type: String,
-                    enum: ['image', 'video'],
-                }
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Media'
             }
         ],
         default: []

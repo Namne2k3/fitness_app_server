@@ -1,7 +1,7 @@
 import express from 'express'
-import { createFeed, uploadMedia } from '../controllers/feed.controller.js'
+import { createFeed, uploadMedia, getAllBlogs } from '../controllers/feed.controller.js'
 import { authenticateToken } from '../middlewares/index.js'
-import { upload, handleMulterErrors } from '../multerConfig.js'
+import { upload, handleMulterErrors, resizeImage } from '../multerConfig.js'
 const router = express.Router()
 
 router.post(
@@ -15,6 +15,7 @@ router.post(
             next();
         });
     },
+    resizeImage,
     uploadMedia
 )
 
@@ -23,5 +24,7 @@ router.post(
     authenticateToken,
     createFeed
 )
+
+router.get('/getAll', getAllBlogs)
 
 export default router

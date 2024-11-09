@@ -5,6 +5,10 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const maxSize = 10 * 1024 * 1024;
+
+// import.meta.url trả về đường dẫn URL của file hiện tại
+// fileURLToPath là một hàm từ module url của NodeJS, được sử dụng để chuyển đổi URL của file (dạng file://) sang đường dẫn hệ thống path
+// ví dụ : file:///C:/projects/my-app/src/index.js => path: C:\projects\my-app\src\index.js
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -25,7 +29,7 @@ const upload = multer({
     },
     fileFilter: (req, file, cb) => {
         const allowedTypes = /jpeg|jpg|png|gif|mp4|mov|avi/;
-        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase()); // Kiểm tra đuôi file
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
 
         if (extname) {
             return cb(null, true);
@@ -64,7 +68,6 @@ const resizeImage = async (req, res, next) => {
                     const image = sharp(file.buffer);
                     const metadata = await image.metadata();
 
-                    // Xoay ảnh theo metadata EXIF
                     image.rotate();
 
                     // Kiểm tra độ phân giải và resize nếu cần
@@ -81,7 +84,6 @@ const resizeImage = async (req, res, next) => {
                     }
                 } else if (isVideo) {
                     console.log(`Processing video: ${file.originalname}`);
-                    // Không xử lý video, chỉ lưu vào ổ đĩa
                 } else {
                     throw new Error(`Unsupported file type: ${file.mimetype}`);
                 }

@@ -24,15 +24,12 @@ const BlogSchema = new mongoose.Schema({
         default: []
     },
     likes: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'User',
+        type: [String],
         default: []
     },
     comments: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Comment',
-            default: []
+            type: Object,
         }
     ],
     allowComment: {

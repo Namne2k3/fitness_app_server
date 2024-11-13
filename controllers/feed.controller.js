@@ -6,6 +6,7 @@ export const getAllBlogs = async (req, res) => {
         const blogs = await Blog.find()
             .populate('author')
             .populate('medias')
+            .sort({ created_at: -1 });
 
         res.status(200).json({ message: 'Get All Blogs Successfully', data: blogs });
     } catch (error) {
@@ -83,3 +84,18 @@ export const updateBlogById = async (req, res) => {
         res.status(500).json({ message: 'An error occurred', error: error.message });
     }
 };
+
+export const getFeedsByUserId = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        const foundFeeds = await Blog.find({ author: userId })
+            .populate('author')
+            .populate('medias')
+            .sort({ created_at: -1 });
+
+        res.status(200).json({ message: 'Get User blogs Successfully', data: foundFeeds ?? [] });
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred', error: error.message });
+    }
+}

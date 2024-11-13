@@ -1,5 +1,18 @@
 import User from "../models/user.model.js"
 import jwt from 'jsonwebtoken'
+
+export const getUserById = async (req, res) => {
+    try {
+
+        const userId = req.params.id
+        const user = await User.findById(userId)
+
+        res.status(200).json({ message: "Get user data successfully!", data: user })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export const getUserByEmail = async (req, res) => {
     try {
         const email = req.params.email

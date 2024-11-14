@@ -14,15 +14,25 @@ const BlogSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    medias: {
-        type: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Media'
+    medias: [
+        {
+            fileUrl: {
+                type: String
+            },
+            fileName: {
+                type: String,
+            },
+            fileType: {
+                type: String
+            },
+            fileSize: {
+                type: Number
+            },
+            type: {
+                type: String
             }
-        ],
-        default: []
-    },
+        }
+    ],
     likes: {
         type: [String],
         default: []

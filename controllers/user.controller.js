@@ -27,7 +27,7 @@ export const updateUser = async (req, res) => {
     try {
         const userBody = req.body
         const userId = req.params.userId
-        const user = await User.updateOne({ _id: userId }, userBody)
+        const user = await User.findByIdAndUpdate(userId, userBody, { new: true })
         res.status(200).json(user)
     } catch (error) {
         res.status(500).json({ message: error.message })

@@ -8,6 +8,7 @@ import userRoutes from '../server/routes/user.route.js';
 import feedbackRoutes from '../server/routes/feedback.route.js';
 import feedRoutes from '../server/routes/feed.route.js';
 import charRoomRoutes from '../server/routes/chatroom.route.js';
+import planRoutes from '../server/routes/plan.route.js';
 import cors from 'cors';
 import path from 'path';
 import http from 'http';
@@ -47,9 +48,47 @@ app.use('/api/user', userRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/feed', feedRoutes);
 app.use('/api/chatroom', charRoomRoutes);
+app.use('/api/plan', planRoutes);
 
+let chatRooms = [
+
+]
 io.on('connection', (socket) => {
-    console.log(`Socket ${socket.id} connected`);
+    console.log(`Socket ${socket.id} connected`)
+
+    socket.on("joinRoom", (roomId) => {
+        socket.join(roomId);
+        console.log(`User joined room: ${roomId}`);
+    });
+
+    socket.on("leaveRoom", (roomId) => {
+        socket.leave(roomId);
+        console.log(`User left room: ${roomId}`);
+    });
+
+    socket.on('createPrivateRoom', ({ userId, userProfileId }) => {
+
+        const roomId = [userId, userProfileId].sort().join("_");
+
+        const existingRoom = chatRooms.find((room) => room._id === roomId);
+        if (!existingRoom) {
+            // Nếu chưa tồn tại, tạo mới phòng chat
+            chatRooms.unshift({ _id: roomId, roomType: "private", members: [userId, userProfileId], messages: [] });
+        }
+
+        socket.join(roomId)
+
+        socket.emit("roomsList", chatRooms);
+
+    })
+
+    socket.on("sendMessage", ({ roomId, senderId, content }) => {
+        const message = { senderId, content, created_at: new Date(), roomId: roomId };
+        console.log("Sending message:", message);
+
+        // Phát tin nhắn tới tất cả người dùng trong phòng, bao gồm cả socket hiện tại
+        io.to(roomId).emit("newMessage", message);
+    })
 
     socket.on('disconnect', (reason) => {
         socket.disconnect()
@@ -59,6 +98,7 @@ io.on('connection', (socket) => {
 
 server.listen(PORT, async () => {
     await connectDb();
+
     // await connectDbMySql();
     console.log(`Server is running on port ${PORT}`);
 });

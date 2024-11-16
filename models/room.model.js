@@ -3,6 +3,10 @@ const schemaOptions = {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
 };
 const roomSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        required: true
+    },
     roomName: {
         type: String,
         trim: true,

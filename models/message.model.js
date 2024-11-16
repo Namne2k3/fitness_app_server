@@ -1,9 +1,10 @@
 import mongoose from 'mongoose'
-
+const schemaOptions = {
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+};
 const messageSchema = new mongoose.Schema({
     roomId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Room',
+        type: String,
         required: true
     },
     senderId: {
@@ -38,7 +39,7 @@ const messageSchema = new mongoose.Schema({
             default: ''
         }
     }
-})
+}, schemaOptions)
 
-const Message = mongoose.Schema('Message', messageSchema)
+const Message = mongoose.model('Message', messageSchema)
 export default Message

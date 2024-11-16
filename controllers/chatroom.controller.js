@@ -1,3 +1,4 @@
+import Message from "../models/message.model.js"
 import Room from "../models/room.model.js"
 
 export const createNewChatRoom = async (req, res) => {
@@ -7,6 +8,36 @@ export const createNewChatRoom = async (req, res) => {
         const saved = await newRoom.save()
 
         res.status(200).json({ message: "Create New Chatroom Successfully!", data: saved })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export const getAllMessagesByRoomId = async (req, res) => {
+    try {
+
+        const messages = await Message.find({ roomId: req.params.roomId })
+        if (!messages) {
+            res.status(4040).json({ message: 'No messages found!' })
+        }
+
+        res.status(200).json({ message: "Create New Message Successfully!", data: messages })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export const createNewMessage = async (req, res) => {
+    try {
+
+        console.log("Check req.body >>> ", req.body);
+        const newMessage = new Message(req.body)
+        console.log("Check newMessage >>> ", newMessage);
+
+        const saved = await newMessage.save()
+        console.log("Check saved >>> ", saved);
+
+        res.status(200).json({ message: "Create New Message Successfully!", data: saved })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -55,7 +86,9 @@ export const findChatRoomByQueries = async (req, res) => {
         if (foundChatRoom) {
             res.status(200).json({ message: "Get Chatroom Successfully!", data: foundChatRoom })
         } else {
+            const roomId = [userId, userProfileId].sort().join("_");
             const newRoom = new Room({
+                _id: roomId,
                 roomType: "private",
                 members: [userId, userProfileId],
                 createdBy: userId

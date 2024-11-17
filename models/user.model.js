@@ -35,6 +35,11 @@ const UserSchema = new mongoose.Schema({
         type: Number,
 
     },
+    goal: {
+        type: String,
+        enum: ['Muscle Gain', 'Fat Loss', 'Maintenance'],
+    },
+
     height: {
         type: Number,
 

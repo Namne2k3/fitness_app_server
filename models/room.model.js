@@ -41,7 +41,8 @@ const roomSchema = new mongoose.Schema({
             default: '',
         },
         createdAt: {
-            type: Date
+            type: Date,
+            default: Date.now()
         }
     }
 }, schemaOptions);

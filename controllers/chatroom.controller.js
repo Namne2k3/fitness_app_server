@@ -16,9 +16,20 @@ export const createNewChatRoom = async (req, res) => {
 export const getAllMessagesByRoomId = async (req, res) => {
     try {
 
-        const messages = await Message.find({ roomId: req.params.roomId })
-        if (!messages) {
-            res.status(4040).json({ message: 'No messages found!' })
+        const { roomId } = req.params
+        const limit = parseInt(req.query.limit) || 10
+        const skip = parseInt(req.query.skip) || 0
+
+
+
+        const messages = await Message
+            .find({ roomId: roomId })
+            .sort({ created_at: -1 })
+            .skip(skip)
+            .limit(limit)
+
+        if (!messages || messages.length === 0) {
+            return res.status(404).json({ message: 'No messages found!' });
         }
 
         res.status(200).json({ message: "Create New Message Successfully!", data: messages })
@@ -101,6 +112,20 @@ export const findChatRoomByQueries = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ message: error.message })
+    }
+}
+
+export const updateLastMessageForRoomChatById = async (req, res) => {
+    try {
+
+        const roomId = req.params.roomId
+        const lastMessage = req.body
+
+        const updatedRoom = await Room.findByIdAndUpdate(roomId, { lastMessage: lastMessage }, { new: true })
+
+        res.status(200).json({ message: 'Get All Rooms Successfully', data: updatedRoom });
+    } catch (error) {
+        res.status(500).json({ message: 'Get All Rooms Occurred Error', error: error.message });
     }
 }
 

@@ -9,6 +9,7 @@ import feedbackRoutes from '../server/routes/feedback.route.js';
 import feedRoutes from '../server/routes/feed.route.js';
 import charRoomRoutes from '../server/routes/chatroom.route.js';
 import planRoutes from '../server/routes/plan.route.js';
+import exerciseRoutes from '../server/routes/exercise.route.js';
 import cors from 'cors';
 import path from 'path';
 import http from 'http';
@@ -46,6 +47,7 @@ app.use('/api/customtrainings', customTrainingsRoutes);
 app.use('/api/trainingrecord', trainingRecordRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/exercises', exerciseRoutes);
 app.use('/api/feed', feedRoutes);
 app.use('/api/chatroom', charRoomRoutes);
 app.use('/api/plan', planRoutes);
@@ -83,7 +85,8 @@ io.on('connection', (socket) => {
     })
 
     socket.on("sendMessage", ({ roomId, senderId, content }) => {
-        const message = { senderId, content, created_at: new Date(), roomId: roomId };
+        const generateID = () => Math.random().toString(36).substring(2, 10);
+        const message = { _id: generateID(), senderId, content, created_at: new Date(), roomId: roomId };
         console.log("Sending message:", message);
 
         // Phát tin nhắn tới tất cả người dùng trong phòng, bao gồm cả socket hiện tại

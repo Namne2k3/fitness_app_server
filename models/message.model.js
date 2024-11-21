@@ -1,8 +1,12 @@
 import mongoose from 'mongoose'
 const schemaOptions = {
-    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at', _id: false },
 };
 const messageSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        required: true
+    },
     roomId: {
         type: String,
         required: true

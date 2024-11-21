@@ -26,14 +26,16 @@ const ExerciseSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    secondaryMuscles: {
-        type: [String],
-        required: true,
-    },
-    instructions: {
-        type: [String],
-        required: true,
-    }
+    secondaryMuscles: [
+        {
+            type: String
+        }
+    ],
+    instructions: [
+        {
+            type: String
+        }
+    ]
 });
 
 const Exercise = mongoose.model('Exercise', ExerciseSchema);

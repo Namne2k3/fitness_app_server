@@ -33,24 +33,34 @@ const UserSchema = new mongoose.Schema({
     },
     weight: {
         type: Number,
-
     },
-    goal: {
-        type: String,
-        enum: ['Muscle Gain', 'Fat Loss', 'Maintenance'],
-    },
-
     height: {
         type: Number,
-
+    },
+    waist: {
+        type: Number
+    },
+    hip: {
+        type: Number,
+    },
+    healthGoal: {
+        type: String,
+        enum: ['Giảm cân', 'Tăng cơ', 'Duy trì cân nặng', 'Cải thiện sức khỏe']
+    },
+    sleep: {
+        type: Number
     },
     age: {
         type: Number,
-
+    },
+    activityLevel: {
+        type: String
+    },
+    bmr: {
+        type: String
     },
     orm: {
         type: Number,
-
     },
     tdee: {
         type: Number

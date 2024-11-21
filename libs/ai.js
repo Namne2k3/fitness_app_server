@@ -3,31 +3,35 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 const key = process.env.GOOGLE_API_KEY
 const genAI = new GoogleGenerativeAI(key);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+const generatePrompt = (trainingRecord) => {
+  const training = JSON.parse(trainingRecord.training);
+  const exercises = training.exercises;
+  const totalTime = trainingRecord.duration;
 
-const createWorkoutPlans = async (userData, goal) => {
-  const prompt = `
-    You are a fitness coach AI. Based on the user's data and fitness goal, create a 30-day structured workout plan with only strength training and rest days.  Return ONLY the JSON object; no surrounding text, explanations, or metadata.  Incorrect JSON will be rejected.
+  let prompt = `Giúp tôi tính calo tiêu hao cho buổi tập:\n`;
 
-    User Data: ${userData}
-    Goal: ${goal}
+  exercises.forEach((exerciseData, index) => {
+    const exercise = exerciseData.exercise;
+    const sets = exerciseData.sets;
 
-    Rules:
-    - Alternate strength training and rest days.
-    - Customize for the goal:
-        - "Muscle Gain": Heavy weight, lower reps (4-6).
-        - "Fat Loss": Higher reps, moderate weight (12-15).
-        - "Maintenance": Balanced weight and reps (8-12).
-    - Use common exercises (Bench Press, Squats, Deadlifts, etc.).
-    - The JSON MUST be a single object with this structure:
+    // Tạo thông tin bài tập
+    let exerciseInfo = `- ${exercise.name}: `;
+    let setsInfo = sets
+      .map((set, setIndex) => {
+        return `${set.reps} reps x ${set.kilogram} kg${setIndex === sets.length - 1 ? '' : ', '}`;
+      })
+      .join("");
+    exerciseInfo += `${sets.length} sets (${setsInfo}).`;
 
-    {
-      "plan": [
-        {"day": "Day 1", "type": "strength", "exercises": [{"name": "Exercise", "sets": 3, "reps": 10, "weight": "Weight"}]},
-        {"day": "Day 2", "type": "rest", "exercises": []},
-        // ... 30 days ...
-      ]
-    }
-  `;
+    prompt += exerciseInfo + `\n`;
+  });
+
+  prompt += `- Tổng thời gian: ${totalTime}, chia đều cho ${exercises.length} bài tập.\n`;
+
+  return prompt;
+}
+const createWorkoutPlans = async (trainingRecord) => {
+  const prompt = generatePrompt(trainingRecord)
 
   try {
     const res = await model.generateContent(prompt);

@@ -83,18 +83,24 @@ export const getExerciseById = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-
 export const getAllBodyPart = async (req, res) => {
     try {
-
-        const data = await Exercise.distinct('bodyPart')
+        // Sử dụng aggregate để nhóm và đếm số lần xuất hiện của từng bodyPart
+        const data = await Exercise.aggregate([
+            { $group: { _id: "$bodyPart", count: { $sum: 1 } } },
+            { $sort: { count: -1 } } // Sắp xếp theo số lượng giảm dần (tùy chọn)
+        ]);
 
         if (!data || data.length === 0) {
             return res.status(404).json({ message: 'No bodyParts data found!' });
         }
 
-        res.status(200).json({ message: "Fetch Exercise Data By Id Successfully!", data: data });
+        res.status(200).json({
+            message: "Fetch bodyPart data successfully!",
+            data: data
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+};
+

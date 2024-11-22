@@ -35,6 +35,16 @@ const ExerciseSchema = new mongoose.Schema({
         {
             type: String
         }
+    ],
+    levels: [
+        {
+            type: String
+        }
+    ],
+    purposes: [
+        {
+            type: String
+        }
     ]
 });
 

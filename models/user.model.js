@@ -43,9 +43,16 @@ const UserSchema = new mongoose.Schema({
     hip: {
         type: Number,
     },
+    focusBodyPart: [
+        {
+            type: String
+        }
+    ],
     healthGoal: {
+        type: String
+    },
+    level: {
         type: String,
-        enum: ['Giảm cân', 'Tăng cơ', 'Duy trì cân nặng', 'Cải thiện sức khỏe']
     },
     sleep: {
         type: Number

@@ -16,7 +16,8 @@ export const createCustomTrainings = async (req, res) => {
 export const getByUserId = async (req, res) => {
     try {
         const userId = req.params.id
-        const trainings = await Training.find({ user: userId }).sort({ "created_at": -1 })
+        const isCustom = req.query.isCustom
+        const trainings = await Training.find({ user: userId, isCustom: isCustom ?? false }).sort({ "created_at": -1 })
 
         res.status(201).json(trainings);
     } catch (error) {

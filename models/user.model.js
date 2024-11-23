@@ -37,12 +37,6 @@ const UserSchema = new mongoose.Schema({
     height: {
         type: Number,
     },
-    waist: {
-        type: Number
-    },
-    hip: {
-        type: Number,
-    },
     focusBodyPart: [
         {
             type: String
@@ -53,15 +47,6 @@ const UserSchema = new mongoose.Schema({
     },
     level: {
         type: String,
-    },
-    sleep: {
-        type: Number
-    },
-    age: {
-        type: Number,
-    },
-    activityLevel: {
-        type: String
     },
     bmr: {
         type: String

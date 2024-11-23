@@ -7,8 +7,14 @@ const schemaOptions = {
 const TrainingSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true,
-        default: 'New Training'
+        default: 'Bài tập mới'
+    },
+    image: {
+        type: String,
+    },
+    isCustom: {
+        type: Boolean,
+        default: false
     },
     exercises: [
         {
@@ -45,11 +51,11 @@ const TrainingSchema = new mongoose.Schema({
                 {
                     kilogram: {
                         type: Number,
-                        min: [0, 'Must be larger or equal 0'],
+                        min: [0, 'Phải lớn hơn hoặc bằng 0'],
                     },
                     reps: {
                         type: Number,
-                        min: [1, 'Must be larger or equal 1'],
+                        min: [1, 'Phải lớn hơn hoặc bằng 1'],
                     },
                     isCheck: {
                         type: Boolean,

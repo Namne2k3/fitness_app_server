@@ -6,6 +6,12 @@ export const createPlans = async (req, res) => {
     const exerciseList = req.body
 
     try {
+
+
+        // ai.js
+        // const workoutPlans = await createWorkoutPlans(user, exerciseList)
+
+
         const workoutPlans = await createWorkoutPlans(user, exerciseList)
         const cleanedJsonString = JSON.parse(workoutPlans.candidates[0].content.parts[0].text);
         const formattedJsonString = JSON.stringify(cleanedJsonString, null, 2);

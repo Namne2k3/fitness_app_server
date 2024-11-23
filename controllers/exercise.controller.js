@@ -104,3 +104,22 @@ export const getAllBodyPart = async (req, res) => {
     }
 };
 
+
+export const getAllExercises = async (req, res) => {
+    try {
+        // Sử dụng aggregate để nhóm và đếm số lần xuất hiện của từng bodyPart
+        const data = await Exercise.find();
+
+        if (!data || data.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy dữ liệu!' });
+        }
+
+        res.status(200).json({
+            message: "Lấy dữ liệu thành công!",
+            data: data
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+

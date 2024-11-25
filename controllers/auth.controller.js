@@ -33,7 +33,7 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: 'Incorrect Password!' });
         }
 
-        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
+        const token = jwt.sign({ id: user._id, ...user }, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
 
         res.status(200).json({ token });

@@ -9,6 +9,10 @@ const TrainingSchema = new mongoose.Schema({
         type: String,
         default: 'Bài tập mới'
     },
+    name: {
+        type: String,
+        default: ""
+    },
     image: {
         type: String,
     },
@@ -16,36 +20,19 @@ const TrainingSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    isInPlan: {
+        type: Boolean,
+        default: false
+    },
+    planId: {
+        type: String,
+        default: ""
+    },
     exercises: [
         {
             exercise: {
-                name: {
-                    type: String,
-                    required: true,
-                },
-                target: {
-                    type: String,
-                    required: true,
-                },
-                gifUrl: {
-                    type: String,
-                    required: true
-                },
-                id: {
-                    type: String,
-                },
-                bodyPart: {
-                    type: String
-                },
-                equipment: {
-                    type: String
-                },
-                instructions: {
-                    type: Array
-                },
-                secondaryMuscles: {
-                    type: Array
-                }
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Exercise',
             },
             sets: [
                 {

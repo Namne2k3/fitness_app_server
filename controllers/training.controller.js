@@ -16,8 +16,9 @@ export const getByUserId = async (req, res) => {
 
         const userId = req.user.id
         const isCustom = req.query.isCustom
+        const isInPlan = req.query.isInPlan
 
-        const data = await Training.find({ user: userId, isCustom: isCustom })
+        const data = await Training.find({ user: userId, isCustom: isCustom, isInPlan: isInPlan }).populate('exercises.exercise')
 
         res.status(200).json({ message: "Lấy dữ liệu training thành công!", data: data });
     } catch (error) {

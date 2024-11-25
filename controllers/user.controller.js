@@ -17,7 +17,7 @@ export const getUserByEmail = async (req, res) => {
     try {
         const email = req.params.email
         const user = await User.findOne({ email: email })
-        res.status(201).json(user)
+        res.status(200).json(user)
     } catch (error) {
         res.status(500).json({ message: error.message })
     }

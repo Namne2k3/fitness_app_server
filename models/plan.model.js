@@ -12,47 +12,17 @@ const planSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
+    current: {
+        type: Number,
+        default: 0
+    },
+    gender: {
+        type: String,
+    },
     trainings: [
         {
-            title: {
-                type: String,
-            },
-            exercises: [
-                {
-                    _id: {
-                        type: String
-                    },
-                    id: {
-                        type: Number
-                    },
-                    name: {
-                        type: String
-                    },
-                    target: {
-                        type: String,
-                    },
-                    gifUrl: {
-                        type: String
-                    },
-                    bodyPart: {
-                        type: String,
-                    },
-                    equipment: {
-                        type: String
-                    },
-                    instructions: [
-                        {
-                            type: String,
-                        }
-                    ],
-                    secondaryMuscles: [
-                        {
-                            type: String
-                        }
-                    ]
-                }
-            ]
-
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Training',
         }
     ],
     image: {

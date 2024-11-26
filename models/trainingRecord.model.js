@@ -2,8 +2,9 @@ import mongoose from 'mongoose'
 
 const TrainingRecordSchema = new mongoose.Schema({
     training: {
-        type: Object,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Training',
+        required: true
     },
     duration: {
         type: String,

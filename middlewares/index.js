@@ -6,20 +6,24 @@ const authenticateToken = (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1]; // "Bearer <token>"
 
     if (!token) {
-        return res.status(401).json({ message: 'Token does not exist' });
+        return res.status(401).json({ message: 'Token không tồn tại' });
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
 
         if (decoded.exp < Date.now() / 1000) {
-            return res.status(401).json({ message: 'Token was expired!' })
+            return res.status(401).json({ message: 'Token đã quá hạn sử dụng!' })
         }
 
         req.user = decoded
+
+        // console.log("Check req.user >>> ", req.user);
+
+
         next()
     } catch (error) {
-        return res.status(401).json({ message: 'Token is not valid!' });
+        return res.status(401).json({ message: 'Token không thích hợp!' });
     }
 }
 

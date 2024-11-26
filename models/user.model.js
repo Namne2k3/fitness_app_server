@@ -3,22 +3,24 @@ import bcrypt from 'bcryptjs'
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: [true, "Name is required"]
+        required: [true, "Tên tài khoản là bắt buộc"],
+        unique: true
     },
     email: {
         type: String,
-        required: [true, "Email is required"],
+        required: [true, "Email là bắt buộc"],
         unique: true,
         lowercase: true,
         trim: true
     },
     image: {
         type: String,
+        default: "https://w7.pngwing.com/pngs/195/539/png-transparent-account-user-person-profile-people-outline-style-icon.png"
     },
     password: {
         type: String,
         required: [true, "Password is required"],
-        minlength: [6, 'Password must be at least 6 characters long']
+        minlength: [6, 'Mật khẩu tối thiểu 6 kí tự!']
     },
     clerkId: {
         type: String,

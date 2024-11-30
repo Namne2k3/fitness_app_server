@@ -11,6 +11,7 @@ import charRoomRoutes from '../server/routes/chatroom.route.js';
 import planRoutes from '../server/routes/plan.route.js';
 import exerciseRoutes from '../server/routes/exercise.route.js';
 import trainingRoutes from '../server/routes/training.route.js';
+import calendarRoutes from '../server/routes/calendar.route.js';
 import cors from 'cors';
 import path from 'path';
 import http from 'http';
@@ -53,6 +54,7 @@ app.use('/api/feed', feedRoutes);
 app.use('/api/chatroom', charRoomRoutes);
 app.use('/api/plan', planRoutes);
 app.use('/api/trainings', trainingRoutes);
+app.use('/api/calendar', calendarRoutes);
 
 let chatRooms = [
 

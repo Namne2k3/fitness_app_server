@@ -17,7 +17,7 @@ export const getByUserId = async (req, res) => {
     try {
         const userId = req.params.id
         const isCustom = req.query.isCustom
-        const trainings = await Training.find({ user: userId, isCustom: isCustom ?? false })
+        const trainings = await Training.find({ user: userId, isCustom: isCustom ?? null })
             .populate('exercises.exercise')
             .sort({ "created_at": -1 })
 

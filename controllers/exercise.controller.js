@@ -16,9 +16,6 @@ export const getAllExercisesByBodyPart = async (req, res) => {
         const skip = parseInt(req.query.skip) || 0
         const bodyPart = req.params.bodyPart
 
-        console.log("bodyPart:", bodyPart);
-
-
         const data = await Exercise.find({
             bodyPart: bodyPart
         })
@@ -39,11 +36,8 @@ export const getAllExercisesByBodyPart = async (req, res) => {
 export const getAllExercisesBySearchQueryName = async (req, res) => {
     try {
         const searchQueryName = req.params.searchQueryName || "";
-        const limit = parseInt(req.query.limit) || 10;
+        const limit = parseInt(req.query.limit) || 0;
         const skip = parseInt(req.query.skip) || 0;
-        console.log("Check searchQueryName >>> ", searchQueryName);
-        console.log("Check limit >>> ", limit);
-        console.log("Check skip >>> ", skip);
 
         const filter = searchQueryName
             ? { name: { $regex: searchQueryName, $options: 'i' } }

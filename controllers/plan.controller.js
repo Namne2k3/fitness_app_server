@@ -43,7 +43,7 @@ export const getAllPlansByUserId = async (req, res) => {
     try {
         const { _id, gender } = req.user._doc
 
-        console.log(req.user._doc);
+        console.log("req user._doc >>> ", req.user._doc);
 
 
         const data = await Plan.find({ user: _id, gender: gender })
@@ -57,6 +57,9 @@ export const getAllPlansByUserId = async (req, res) => {
 
                 }
             })
+
+        console.log("Data : ", data);
+
 
         res.status(200).json({ message: "Lấy dữ liệu lộ trình bài tập thành công!", data: data })
     } catch (error) {

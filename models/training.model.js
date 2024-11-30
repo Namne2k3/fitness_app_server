@@ -25,8 +25,8 @@ const TrainingSchema = new mongoose.Schema({
         default: false
     },
     planId: {
-        type: String,
-        default: ""
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Plan',
     },
     exercises: [
         {

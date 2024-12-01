@@ -36,12 +36,18 @@ export const getAllExercisesByBodyPart = async (req, res) => {
 export const getAllExercisesBySearchQueryName = async (req, res) => {
     try {
         const searchQueryName = req.params.searchQueryName || "";
+
+        const bodyParts = req.query.bodyParts ? JSON.parse(req.query.bodyParts) : [];
+        const equipments = req.query.equipments ? JSON.parse(req.query.equipments) : [];
+
         const limit = parseInt(req.query.limit) || 0;
         const skip = parseInt(req.query.skip) || 0;
 
-        const filter = searchQueryName
-            ? { name: { $regex: searchQueryName, $options: 'i' } }
-            : {};
+        const filter = {
+            ...(searchQueryName && { name: { $regex: searchQueryName, $options: 'i' } }), // Tìm kiếm theo tên
+            ...(bodyParts.length > 0 && { bodyPart: { $in: bodyParts } }),  // Tìm theo các bodyPart trong mảng
+            ...(equipments.length > 0 && { equipment: { $in: equipments } }),  // Tìm theo các equipment trong mảng
+        }
 
         const data = await Exercise.find(filter)
             .skip(skip)

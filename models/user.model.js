@@ -31,13 +31,22 @@ const UserSchema = new mongoose.Schema({
         default: "USER"
     },
     gender: {
-        type: String,
+        type: String
     },
     weight: {
-        type: Number,
+        type: Number
+    },
+    targetWeight: {
+        type: Number
+    },
+    bmi: {
+        type: Number
+    },
+    targetBMI: {
+        type: Number
     },
     height: {
-        type: Number,
+        type: Number
     },
     focusBodyPart: [
         {
@@ -48,15 +57,27 @@ const UserSchema = new mongoose.Schema({
         type: String
     },
     level: {
-        type: String,
+        type: String
     },
     bmr: {
         type: String
     },
     orm: {
-        type: Number,
+        type: Number
+    },
+    activityLevel: {
+        type: Number
     },
     tdee: {
+        type: Number
+    },
+    daysShouldTraining: {
+        type: Number
+    },
+    caloriesPerTraining: {
+        type: Number
+    },
+    totalDaysToReachTarget: {
         type: Number
     }
 })

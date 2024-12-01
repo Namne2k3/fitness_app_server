@@ -56,7 +56,6 @@ export const getAllTrainingRecordByUserId = async (req, res) => {
 
                 }
             })
-            .limit(3)
             .sort({ created_at: -1 });
 
         // // Apply pagination if limit or offset is provided
@@ -77,20 +76,12 @@ export const getAllTrainingRecordByUserId = async (req, res) => {
     }
 };
 
-
-
-
 export const getTrainingsByMonth = async (req, res) => {
 
 
     try {
         const month = req.params.month
         const { _id } = req.user._doc;
-
-        console.log("Check month >>> ", month);
-        console.log("Check _id >>> ", _id);
-
-
 
         const year = new Date().getFullYear();
         const startOfMonth = new Date(year, month - 1, 1);
@@ -109,3 +100,53 @@ export const getTrainingsByMonth = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
+export const getTrainingsByWeek = async (req, res) => {
+    try {
+        const { _id } = req.user._doc; // Lấy user ID từ middleware xác thực
+
+        // Lấy thời gian hiện tại
+        const now = new Date();
+
+        // Tính ngày đầu tuần (Thứ 2) dựa trên UTC
+        const startOfWeek = new Date(now);
+        const day = startOfWeek.getUTCDay(); // Lấy ngày trong tuần (0 = Chủ Nhật, 1 = Thứ 2, ...)
+        const diff = (day === 0 ? -6 : 1) - day; // Tính khoảng cách đến Thứ 2
+        startOfWeek.setUTCDate(startOfWeek.getUTCDate() + diff);
+        startOfWeek.setUTCHours(0, 0, 0, 0);
+
+        // Tính ngày cuối tuần (Chủ Nhật)
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setUTCDate(endOfWeek.getUTCDate() + 6);
+        endOfWeek.setUTCHours(23, 59, 59, 999);
+
+        console.log("Start of week (UTC):", startOfWeek);
+        console.log("End of week (UTC):", endOfWeek);
+
+        // Truy vấn MongoDB
+        const records = await TrainingRecord.find({
+            user: _id,
+            created_at: {
+                $gte: startOfWeek,
+                $lte: endOfWeek,
+            },
+        })
+            .populate({
+                path: 'training',
+                populate: {
+                    path: 'exercises.exercise',
+                },
+            })
+            .sort({ created_at: -1 });
+
+        res.status(200).json({
+            message: "Lấy dữ liệu trong tuần thành công",
+            data: records,
+        });
+    } catch (error) {
+        console.error("Error fetching weekly data:", error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+

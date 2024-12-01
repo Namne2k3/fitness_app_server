@@ -37,7 +37,7 @@ export const deleteCalendarNotifyById = async (req, res) => {
 
 export const deleteNotificationsPassed = async (req, res) => {
     try {
-        const currentDate = new Date();
+        const currentDate = Date.now();
         const { _id } = req.user._doc
         await Calendar.deleteMany({ user: _id, calendarDate: { $lt: currentDate } })
 

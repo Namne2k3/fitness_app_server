@@ -17,10 +17,6 @@ const authenticateToken = (req, res, next) => {
         }
 
         req.user = decoded
-
-        console.log("Check req.user >>> ", req.user);
-
-
         next()
     } catch (error) {
         return res.status(401).json({ message: 'Token không thích hợp!' });

@@ -19,6 +19,8 @@ import { connectDb } from './libs/db.js';
 import { connectDbMySql } from './libs/mysqldb.js';
 import { fileURLToPath } from 'url';
 import { Server } from 'socket.io';
+import Message from './models/message.model.js';
+import Room from './models/room.model.js';
 
 // Tạo __filename và __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -56,21 +58,23 @@ app.use('/api/plan', planRoutes);
 app.use('/api/trainings', trainingRoutes);
 app.use('/api/calendar', calendarRoutes);
 
-let chatRooms = [
-
-]
+let chatRooms = []
+let userSockets = {}
 io.on('connection', (socket) => {
-    console.log(`Socket ${socket.id} connected`)
-
-    socket.on("joinRoom", (roomId) => {
-        socket.join(roomId);
-        console.log(`User joined room: ${roomId}`);
+    socket.on('register', (userId) => {
+        userSockets[userId] = socket.id;
+        console.log(`User ${userId} connected with socketId ${socket.id}`);
     });
 
-    socket.on("leaveRoom", (roomId) => {
-        socket.leave(roomId);
-        console.log(`User left room: ${roomId}`);
-    });
+    // socket.on("joinRoom", (roomId) => {
+    //     socket.join(roomId);
+    //     console.log(`User joined room: ${roomId}`);
+    // });
+
+    // socket.on("leaveRoom", (roomId) => {
+    //     socket.leave(roomId);
+    //     console.log(`User left room: ${roomId}`);
+    // });
 
     socket.on('createPrivateRoom', ({ userId, userProfileId }) => {
 
@@ -88,17 +92,32 @@ io.on('connection', (socket) => {
 
     })
 
-    socket.on("sendMessage", ({ roomId, senderId, content }) => {
-        const generateID = () => Math.random().toString(36).substring(2, 10);
-        const message = { _id: generateID(), senderId, content, created_at: new Date(), roomId: roomId };
-        console.log("Sending message:", message);
+    socket.on("sendMessage", async (message) => {
+        const { roomId, senderId, content } = message;
 
-        // Phát tin nhắn tới tất cả người dùng trong phòng, bao gồm cả socket hiện tại
-        io.to(roomId).emit("newMessage", message);
+        const messageBeSent = await Message.findById(message._id).populate('senderId')
+
+        const room = await Room.findByIdAndUpdate(
+            roomId,
+            { lastMessage: { senderId: senderId, content: content, createdAt: new Date() } },
+            { new: true }
+        )
+        const needToSend = room.members[0] == senderId ? room.members[1] : room.members[0]
+
+        if (userSockets[needToSend]) {
+            io.to(userSockets[needToSend]).emit("newMessage", messageBeSent);
+        }
+        console.log("Sending message:", messageBeSent);
     })
 
     socket.on('disconnect', (reason) => {
-        socket.disconnect()
+        for (let userId in userSockets) {
+            if (userSockets[userId] === socket.id) {
+                delete userSockets[userId];
+                console.log(`User ${userId} disconnected`);
+                break;
+            }
+        }
         console.log(`Socket ${socket.id} disconnected due to ${reason}`);
     });
 });

@@ -29,10 +29,10 @@ export const getAllMessagesByRoomId = async (req, res) => {
             .limit(limit)
 
         if (!messages || messages.length === 0) {
-            return res.status(404).json({ message: 'No messages found!' });
+            return res.status(404).json({ message: 'Không tìm thấy tin nhắn!' });
         }
 
-        res.status(200).json({ message: "Create New Message Successfully!", data: messages })
+        res.status(200).json({ message: "Gửi tin nhắn thành công!", data: messages })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -40,15 +40,10 @@ export const getAllMessagesByRoomId = async (req, res) => {
 
 export const createNewMessage = async (req, res) => {
     try {
-
-        console.log("Check req.body >>> ", req.body);
         const newMessage = new Message(req.body)
-        console.log("Check newMessage >>> ", newMessage);
 
         const saved = await newMessage.save()
-        console.log("Check saved >>> ", saved);
-
-        res.status(200).json({ message: "Create New Message Successfully!", data: saved })
+        res.status(200).json({ message: "Thêm tin nhắn thành công!", data: saved })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -57,7 +52,7 @@ export const createNewMessage = async (req, res) => {
 export const getAllRooms = async (req, res) => {
     try {
 
-        const userId = req.user.id
+        const userId = req.user._id
 
 
         const rooms = await Room.find({ members: userId })

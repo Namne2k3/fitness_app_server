@@ -5,8 +5,16 @@ export const createTrainingRecord = async (req, res) => {
         const recordData = req.body;
         const newTrainingRecord = new TrainingRecord(recordData)
         const savedRecord = await newTrainingRecord.save()
+        const returnData = await TrainingRecord
+            .findById(savedRecord._id).
+            populate({
+                path: 'training',
+                populate: {
+                    path: 'exercises.exercise',
 
-        res.status(201).json(savedRecord)
+                }
+            })
+        res.status(201).json({ message: "Tạo bản ghi tập luyện thành công!", data: returnData })
 
     } catch (error) {
         res.status(500).json({ message: error.message })
@@ -44,10 +52,11 @@ export const getTrainingRecord = async (req, res) => {
 export const getAllTrainingRecordByUserId = async (req, res) => {
     try {
         const { _id } = req.user;
+        const limit = parseInt(req.query.limit) || 0;
+        const skip = parseInt(req.query.skip) || 0;
         // const offset = parseInt(req.query.offset) || 0;  // Default offset is 0
         // const limit = parseInt(req.query.limit);  // No default for limit
 
-        // // Build the query
         const data = await TrainingRecord.find({ user: _id })
             .populate({
                 path: 'training',
@@ -56,19 +65,9 @@ export const getAllTrainingRecordByUserId = async (req, res) => {
 
                 }
             })
-            .sort({ created_at: -1 });
-
-        // // Apply pagination if limit or offset is provided
-        // if (!isNaN(limit) && limit > 0) {
-        //     query = query.limit(limit);  // Apply limit if provided and valid
-        // }
-
-        // if (offset > 0) {
-        //     query = query.skip(offset);  // Apply offset if provided and valid
-        // }
-
-        // Fetch records
-        // const countRecords = await query;
+            .sort({ created_at: -1 })
+            .skip(skip)
+            .limit(limit);
 
         res.status(200).json({ message: "Lấy dữ liệu lịch sử thành công", data: data });
     } catch (error) {

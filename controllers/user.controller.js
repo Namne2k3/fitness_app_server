@@ -1,6 +1,17 @@
 import User from "../models/user.model.js"
 import jwt from 'jsonwebtoken'
 
+export const updateUserById = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const body = req.body;
+        const updated = await User.findByIdAndUpdate(_id, body, { new: true })
+        res.status(200).json({ message: "Cập nhật dữ liệu thông tin người dùng thành công", data: updated })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export const getUserById = async (req, res) => {
     try {
 

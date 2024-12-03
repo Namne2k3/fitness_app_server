@@ -11,6 +11,19 @@ export const updateCurrentPlanById = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
+export const recreatePlans = async (req, res) => {
+    try {
+        const { _id } = req.user
+        await Plan.deleteMany({ user: _id })
+        const plans = req.body
+        const saved = await Plan.insertMany(plans)
+        res.status(200).json({ message: "Tạo lại kế hoạch tập luyện thành công!", data: saved })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export const createPlans = async (req, res) => {
 
     const plans = req.body
@@ -33,7 +46,7 @@ export const createPlans = async (req, res) => {
 
 
 
-        res.status(200).json({ message: "Create New Workout Plans Successfully!", data: saved })
+        res.status(200).json({ message: "Tạo kế hoạch tập luyện thành công!", data: saved })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -41,12 +54,10 @@ export const createPlans = async (req, res) => {
 
 export const getAllPlansByUserId = async (req, res) => {
     try {
-        const { _id, gender } = req.user._doc
 
-        console.log("req user._doc >>> ", req.user._doc);
+        const { _id } = req.user
 
-
-        const data = await Plan.find({ user: _id, gender: gender })
+        const data = await Plan.find({ user: _id })
             .populate({
                 path: 'user'
             })
@@ -54,12 +65,8 @@ export const getAllPlansByUserId = async (req, res) => {
                 path: 'trainings',
                 populate: {
                     path: 'exercises.exercise',
-
                 }
             })
-
-        console.log("Data : ", data);
-
 
         res.status(200).json({ message: "Lấy dữ liệu lộ trình bài tập thành công!", data: data })
     } catch (error) {

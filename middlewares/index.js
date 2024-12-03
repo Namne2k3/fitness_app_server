@@ -18,7 +18,7 @@ const authenticateToken = (req, res, next) => {
 
         req.user = decoded
 
-        // console.log("Check req.user >>> ", req.user);
+        console.log("Check req.user >>> ", req.user);
 
 
         next()

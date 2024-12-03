@@ -12,7 +12,7 @@ export const createCalendarNotify = async (req, res) => {
 export const getCalendarNotifications = async (req, res) => {
     try {
         const currentDate = new Date();
-        const { _id } = req.user._doc
+        const { _id } = req.user
 
         const calendars = await Calendar.find({ user: _id, calendarDate: { $gt: currentDate } })
             .populate('training')
@@ -38,7 +38,7 @@ export const deleteCalendarNotifyById = async (req, res) => {
 export const deleteNotificationsPassed = async (req, res) => {
     try {
         const currentDate = Date.now();
-        const { _id } = req.user._doc
+        const { _id } = req.user
         await Calendar.deleteMany({ user: _id, calendarDate: { $lt: currentDate } })
 
         res.status(200).json({ message: "Đã xóa tất cả thông báo đã qua!" })

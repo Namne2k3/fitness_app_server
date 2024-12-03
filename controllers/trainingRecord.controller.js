@@ -43,7 +43,7 @@ export const getTrainingRecord = async (req, res) => {
 
 export const getAllTrainingRecordByUserId = async (req, res) => {
     try {
-        const { _id } = req.user._doc;
+        const { _id } = req.user;
         // const offset = parseInt(req.query.offset) || 0;  // Default offset is 0
         // const limit = parseInt(req.query.limit);  // No default for limit
 
@@ -81,7 +81,7 @@ export const getTrainingsByMonth = async (req, res) => {
 
     try {
         const month = req.params.month
-        const { _id } = req.user._doc;
+        const { _id } = req.user;
 
         const year = new Date().getFullYear();
         const startOfMonth = new Date(year, month - 1, 1);
@@ -103,7 +103,7 @@ export const getTrainingsByMonth = async (req, res) => {
 
 export const getTrainingsByWeek = async (req, res) => {
     try {
-        const { _id } = req.user._doc; // Lấy user ID từ middleware xác thực
+        const { _id } = req.user; // Lấy user ID từ middleware xác thực
 
         // Lấy thời gian hiện tại
         const now = new Date();

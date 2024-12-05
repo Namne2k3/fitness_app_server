@@ -21,24 +21,26 @@ const messageSchema = new mongoose.Schema({
         enum: ['text', 'image', 'file'],
         default: 'text'
     },
-    image: {
-        url: {
-            type: String,
-            default: ''
-        },
-        width: {
-            type: Number,
-            default: 0
-        },
-        height: {
-            type: Number,
-            default: 0
-        },
-        format: {
-            type: String,
-            default: ''
+    medias: [
+        {
+            fileUrl: {
+                type: String
+            },
+            fileName: {
+                type: String,
+            },
+            fileType: {
+                type: String
+            },
+            fileSize: {
+                type: Number
+            },
+            type: {
+                type: String
+            }
         }
-    }
+    ]
+
 }, schemaOptions)
 
 const Message = mongoose.model('Message', messageSchema)

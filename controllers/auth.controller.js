@@ -8,11 +8,11 @@ export const signup = async (req, res) => {
         const userExist = await User.findOne({ email })
 
         if (userExist) {
-            return res.status(400).json({ message: "User already exists!" })
+            return res.status(400).json({ message: "Tài khoản đã tồn tại!" })
         }
         const user = await User.create(req.body)
 
-        res.status(201).json({ user, message: "User created successfully!" })
+        res.status(201).json({ user, message: "Đăng ký tài khoản thành công!" })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -24,13 +24,13 @@ export const login = async (req, res) => {
 
         const [user] = await User.find({ email: email });
         if (!user) {
-            return res.status(400).json({ message: 'User does not existed' });
+            return res.status(400).json({ message: 'Tài khoản không tồn tại' });
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
-            return res.status(400).json({ message: 'Incorrect Password!' });
+            return res.status(400).json({ message: 'Sai mật khẩu!' });
         }
 
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });

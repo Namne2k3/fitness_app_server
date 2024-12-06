@@ -14,16 +14,16 @@ export const getAllFoods = async (req, res) => {
             query.name = { $regex: filters?.name, $options: 'i' };
         }
         if (filters.Calories && filters.Calories != '0') {
-            query.Calories = { $lt: parseFloat(filters.Calories) };
+            query.Calories = { $lte: parseFloat(filters.Calories) };
         }
         if (filters.Protein && filters.Protein != '0') {
-            query.Protein = { $lt: parseFloat(filters.Protein) };
+            query.Protein = { $lte: parseFloat(filters.Protein) };
         }
         if (filters.Fat && filters.Fat != '0') {
-            query.Fat = { $lt: parseFloat(filters.Fat) };
+            query.Fat = { $lte: parseFloat(filters.Fat) };
         }
         if (filters.Carbonhydrates && filters.Carbonhydrates != '0') {
-            query.Carbonhydrates = { $lt: parseFloat(filters.Carbonhydrates) };
+            query.Carbonhydrates = { $lte: parseFloat(filters.Carbonhydrates) };
         }
 
         const foods = await Food.find(query)

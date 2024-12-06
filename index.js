@@ -1,17 +1,18 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import authRoutes from '../server/routes/auth.route.js';
-import customTrainingsRoutes from '../server/routes/customTrainingsRoutes.route.js';
-import trainingRecordRoutes from '../server/routes/trainingRecord.route.js';
-import userRoutes from '../server/routes/user.route.js';
-import feedbackRoutes from '../server/routes/feedback.route.js';
-import feedRoutes from '../server/routes/feed.route.js';
-import charRoomRoutes from '../server/routes/chatroom.route.js';
-import planRoutes from '../server/routes/plan.route.js';
-import exerciseRoutes from '../server/routes/exercise.route.js';
-import trainingRoutes from '../server/routes/training.route.js';
-import calendarRoutes from '../server/routes/calendar.route.js';
+import authRoutes from './routes/auth.route.js';
+import customTrainingsRoutes from './routes/customTrainingsRoutes.route.js';
+import trainingRecordRoutes from './routes/trainingRecord.route.js';
+import userRoutes from './routes/user.route.js';
+import feedbackRoutes from './routes/feedback.route.js';
+import feedRoutes from './routes/feed.route.js';
+import charRoomRoutes from './routes/chatroom.route.js';
+import planRoutes from './routes/plan.route.js';
+import exerciseRoutes from './routes/exercise.route.js';
+import trainingRoutes from './routes/training.route.js';
+import calendarRoutes from './routes/calendar.route.js';
+import foodRoutes from './routes/food.route.js';
 import cors from 'cors';
 import path from 'path';
 import http from 'http';
@@ -57,6 +58,7 @@ app.use('/api/chatroom', charRoomRoutes);
 app.use('/api/plan', planRoutes);
 app.use('/api/trainings', trainingRoutes);
 app.use('/api/calendar', calendarRoutes);
+app.use('/api/foods', foodRoutes);
 
 let chatRooms = []
 let userSockets = {}

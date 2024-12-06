@@ -24,8 +24,8 @@ router.post(
     authenticateToken,
     createFeed
 )
-router.get('/getDetail/:id', getBlogById)
+router.get('/getDetail/:id', authenticateToken, getBlogById)
 router.get('/user/:id', authenticateToken, getFeedsByUserId)
-router.get('/getAll', getAllBlogs)
+router.get('/getAll', authenticateToken, getAllBlogs)
 router.put('/update/:id', authenticateToken, updateBlogById)
 export default router

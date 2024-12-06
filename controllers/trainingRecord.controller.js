@@ -119,9 +119,6 @@ export const getTrainingsByWeek = async (req, res) => {
         endOfWeek.setUTCDate(endOfWeek.getUTCDate() + 6);
         endOfWeek.setUTCHours(23, 59, 59, 999);
 
-        console.log("Start of week (UTC):", startOfWeek);
-        console.log("End of week (UTC):", endOfWeek);
-
         // Truy vấn MongoDB
         const records = await TrainingRecord.find({
             user: _id,

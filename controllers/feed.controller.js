@@ -3,10 +3,16 @@ import Media from "../models/media.model.js"
 
 export const getAllBlogs = async (req, res) => {
     try {
+
+        const limit = parseInt(req.query.limit) || 10
+        const skip = parseInt(req.query.skip) || 0
+
         const blogs = await Blog.find()
             .populate('author')
             .populate('medias')
-            .sort({ created_at: -1 });
+            .sort({ created_at: 1 })
+            .skip(skip)
+            .limit(limit)
 
         res.status(200).json({ message: 'Get All Blogs Successfully', data: blogs });
     } catch (error) {

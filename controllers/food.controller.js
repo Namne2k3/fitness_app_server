@@ -7,8 +7,6 @@ export const getAllFoods = async (req, res) => {
         const skip = parseInt(req.query.skip) || 0;
         const { ...filters } = req.query;
 
-        console.log("Check filters >>> ", filters);
-
         const query = {};
         if (filters.name || filters.name != "") {
             query.name = { $regex: filters?.name, $options: 'i' };

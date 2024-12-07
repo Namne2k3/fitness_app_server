@@ -10,7 +10,7 @@ export const getAllBlogs = async (req, res) => {
         const blogs = await Blog.find()
             .populate('author')
             .populate('medias')
-            .sort({ created_at: 1 })
+            .sort({ created_at: -1 })
             .skip(skip)
             .limit(limit)
 

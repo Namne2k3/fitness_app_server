@@ -24,7 +24,7 @@ export const login = async (req, res) => {
 
         const [user] = await User.find({ email: email });
         if (!user) {
-            return res.status(400).json({ message: 'Tài khoản không tồn tại' });
+            return res.status(400).json({ message: 'Email chưa được đăng ký' });
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -36,7 +36,7 @@ export const login = async (req, res) => {
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
 
-        res.status(200).json({ token });
+        res.status(200).json({ data: user, token });
     } catch (error) {
         res.status(500).json({ message: error.message })
     }

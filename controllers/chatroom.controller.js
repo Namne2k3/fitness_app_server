@@ -24,6 +24,7 @@ export const getAllMessagesByRoomId = async (req, res) => {
 
         const messages = await Message
             .find({ roomId: roomId })
+            .populate('sender', '_id')
             .sort({ created_at: -1 })
             .skip(skip)
             .limit(limit)
@@ -43,7 +44,11 @@ export const createNewMessage = async (req, res) => {
         const newMessage = new Message(req.body)
 
         const saved = await newMessage.save()
-        res.status(200).json({ message: "Thêm tin nhắn thành công!", data: saved })
+        const populatedMessage = await Message.findById(saved._id)
+            .populate('sender')
+            .exec();
+
+        res.status(200).json({ message: "Thêm tin nhắn thành công!", data: populatedMessage })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -119,6 +124,18 @@ export const updateLastMessageForRoomChatById = async (req, res) => {
         const updatedRoom = await Room.findByIdAndUpdate(roomId, { lastMessage: lastMessage }, { new: true })
 
         res.status(200).json({ message: 'Get All Rooms Successfully', data: updatedRoom });
+    } catch (error) {
+        res.status(500).json({ message: 'Get All Rooms Occurred Error', error: error.message });
+    }
+}
+
+export const getRoomById = async (req, res) => {
+    try {
+
+        const roomId = req.params.id
+        const data = await Room.findById(roomId).populate('members')
+
+        res.status(200).json({ message: 'Lấy dữ liệu chatroom thành công', data: data });
     } catch (error) {
         res.status(500).json({ message: 'Get All Rooms Occurred Error', error: error.message });
     }

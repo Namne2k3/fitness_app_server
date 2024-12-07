@@ -66,6 +66,7 @@ io.on('connection', (socket) => {
     socket.on('register', (userId) => {
         userSockets[userId] = socket.id;
         console.log(`User ${userId} connected with socketId ${socket.id}`);
+        console.log("Check userSockets >>> ", userSockets);
     });
 
     // socket.on("joinRoom", (roomId) => {
@@ -95,21 +96,22 @@ io.on('connection', (socket) => {
     })
 
     socket.on("sendMessage", async (message) => {
-        const { roomId, senderId, content } = message;
+        const { roomId, sender, content } = message;
 
-        const messageBeSent = await Message.findById(message._id).populate('senderId')
+        const messageBeSent = await Message.findById(message._id).populate('sender')
 
         const room = await Room.findByIdAndUpdate(
             roomId,
-            { lastMessage: { senderId: senderId, content: content, createdAt: new Date() } },
+            { lastMessage: { senderId: sender._id, content: content, createdAt: new Date() } },
             { new: true }
         )
-        const needToSend = room.members[0] == senderId ? room.members[1] : room.members[0]
+        const needToSend = room.members[0] == sender._id ? room.members[1] : room.members[0]
 
         if (userSockets[needToSend]) {
+            console.log("Check messageBeSent >>> ", messageBeSent);
+
             io.to(userSockets[needToSend]).emit("newMessage", messageBeSent);
         }
-        console.log("Sending message:", messageBeSent);
     })
 
     socket.on('disconnect', (reason) => {
@@ -120,7 +122,6 @@ io.on('connection', (socket) => {
                 break;
             }
         }
-        console.log(`Socket ${socket.id} disconnected due to ${reason}`);
     });
 });
 

@@ -1,6 +1,15 @@
 import Blog from "../models/blog.model.js";
 import Media from "../models/media.model.js"
 
+export const deleteById = async (req, res) => {
+    try {
+        await Blog.findByIdAndDelete(req.params.id)
+        res.status(200).json({ message: "Xóa bài đăng thành công" })
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred', error: error.message });
+    }
+}
+
 export const getAllBlogs = async (req, res) => {
     try {
 

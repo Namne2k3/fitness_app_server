@@ -30,6 +30,8 @@ export const login = async (req, res) => {
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
+
+            console.log("Sai mat khau");
             return res.status(400).json({ message: 'Sai mật khẩu!' });
         }
 

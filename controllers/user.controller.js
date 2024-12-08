@@ -1,6 +1,15 @@
 import User from "../models/user.model.js"
 import jwt from 'jsonwebtoken'
 
+export const getAllUsers = async (req, res) => {
+    try {
+        const data = await User.find()
+        res.status(200).json({ message: "Lấy toàn bộ dữ liệu user thành công", data: data })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export const updateUserById = async (req, res) => {
     try {
         const { _id } = req.user;

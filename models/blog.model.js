@@ -16,7 +16,10 @@ const BlogSchema = new mongoose.Schema({
     },
     medias: [
         {
-            fileUrl: {
+            $id: {
+                type: String,
+            },
+            uri: {
                 type: String
             },
             fileName: {

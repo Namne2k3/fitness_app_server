@@ -1,5 +1,8 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
+const schemaOptions = {
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+};
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -104,7 +107,7 @@ const UserSchema = new mongoose.Schema({
             type: Number
         }
     }
-})
+}, schemaOptions)
 
 
 UserSchema.pre("save", async function (next) {

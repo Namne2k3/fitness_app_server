@@ -1,4 +1,5 @@
 import Exercise from "../models/exercise.model.js";
+import Training from "../models/training.model.js";
 // Các bộ phận cơ thể (bodyPart) trong dữ liệu:
 // Bắp tay
 // Cardio
@@ -10,6 +11,60 @@ import Exercise from "../models/exercise.model.js";
 // Ngực
 // Vai
 // Đùi
+export const getAllEquipments = async (req, res) => {
+    try {
+        const data = await Exercise.aggregate([
+            { $group: { _id: "$equipment", count: { $sum: 1 } } }
+        ]);
+
+        if (!data || data.length === 0) {
+            return res.status(404).json({ message: 'No bodyParts data found!' });
+        }
+
+        res.status(200).json({
+            message: "Fetch equipments data successfully!",
+            data: data
+        });
+
+
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+export const deleteExercisesById = async (req, res) => {
+    try {
+        await Exercise.findOneAndDelete({ _id: req.params.id });
+
+        res.status(200).json({ message: "Xóa bài tập thành công!" })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export const updateExercise = async (req, res) => {
+    try {
+        console.log("Check req update body >>> ", req.body);
+
+        const newExe = await Exercise.findByIdAndUpdate(req.body._id, req.body)
+
+        res.status(200).json({ message: "Cập nhật bài tập thành công!", data: newExe })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export const createNewExercise = async (req, res) => {
+    try {
+        console.log("Check req body >>> ", req.body);
+
+        const newExe = await Exercise.create(req.body)
+
+        res.status(200).json({ message: "Tạo mới bài tập thành công!", data: newExe })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 export const getAllExercisesByBodyPart = async (req, res) => {
     try {
         const limit = parseInt(req.query.limit) || 10
@@ -36,6 +91,8 @@ export const getAllExercisesByBodyPart = async (req, res) => {
 export const getAllExercisesBySearchQueryName = async (req, res) => {
     try {
         const searchQueryName = req.params.searchQueryName || "";
+        console.log("searchQueryName >>> ", searchQueryName);
+
 
         const bodyParts = req.query.bodyParts ? JSON.parse(req.query.bodyParts) : [];
         const equipments = req.query.equipments ? JSON.parse(req.query.equipments) : [];

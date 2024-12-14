@@ -35,7 +35,7 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: 'Sai mật khẩu!' });
         }
 
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
+        const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
 
         res.status(200).json({ data: user, token });

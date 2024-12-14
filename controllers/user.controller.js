@@ -1,9 +1,57 @@
+import mongoose from "mongoose";
 import User from "../models/user.model.js"
 import jwt from 'jsonwebtoken'
+export const lockUser = async (req, res) => {
+    try {
+        const { id } = req.params; // Lấy ID từ params
+        const { isLocked } = req.query; // Lấy isLocked từ query string
+
+        console.log("Dang khoa ? ", isLocked);
+
+        // Cập nhật isLocked trong cơ sở dữ liệu
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { isLocked: isLocked === 'true' }, // Chuyển đổi sang boolean
+            { new: true } // Trả về tài liệu đã cập nhật
+        );
+
+        console.log("Check updatedUser >>> ", updatedUser);
+
+        res.status(200).json({ message: "Khóa tài khoản thành công", data: updatedUser });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+export const findUserByUsernameOrEmail = async (req, res) => {
+    try {
+        const { query } = req.params; // Lấy query từ params
+
+        if (!query) {
+            return res.status(400).json({ message: "Query không được để trống" });
+        }
+
+        // Tìm kiếm user dựa trên username hoặc email
+        const user = await User.find({
+            $or: [
+                { username: { $regex: query, $options: 'i' } },
+                { email: { $regex: query, $options: 'i' } },
+            ]
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: "Không tìm thấy người dùng" });
+        }
+
+        res.status(200).json({ message: "Tìm thấy người dùng", data: user });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 export const getAllUsers = async (req, res) => {
     try {
-        const data = await User.find()
+
+        const data = await User.find({ _id: { $ne: req.user._id } })
         res.status(200).json({ message: "Lấy toàn bộ dữ liệu user thành công", data: data })
     } catch (error) {
         res.status(500).json({ message: error.message })
@@ -24,8 +72,8 @@ export const updateUserById = async (req, res) => {
 export const getUserById = async (req, res) => {
     try {
 
-        const userId = req.params.id
-        const user = await User.findById(userId)
+        const id = req.params.id
+        const user = await User.findById(id)
 
         res.status(200).json({ message: "Get user data successfully!", data: user })
     } catch (error) {

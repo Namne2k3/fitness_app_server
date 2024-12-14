@@ -29,6 +29,10 @@ const UserSchema = new mongoose.Schema({
         required: [true, "Password is required"],
         minlength: [6, 'Mật khẩu tối thiểu 6 kí tự!']
     },
+    isLocked: {
+        type: Boolean,
+        default: false
+    },
     pushToken: {
         type: String,
     },

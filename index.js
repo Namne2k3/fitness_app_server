@@ -67,7 +67,6 @@ io.on('connection', (socket) => {
     socket.on('register', (userId) => {
         userSockets[userId] = socket.id;
         console.log(`User ${userId} connected with socketId ${socket.id}`);
-        console.log("Check userSockets >>> ", userSockets);
     });
 
     // socket.on("joinRoom", (roomId) => {
@@ -109,8 +108,6 @@ io.on('connection', (socket) => {
         const needToSend = room.members[0] == sender._id ? room.members[1] : room.members[0]
 
         if (userSockets[needToSend]) {
-            console.log("Check messageBeSent >>> ", messageBeSent);
-
             io.to(userSockets[needToSend]).emit("newMessage", messageBeSent);
         }
     })

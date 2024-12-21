@@ -43,7 +43,6 @@ export const deleteExercisesById = async (req, res) => {
 
 export const updateExercise = async (req, res) => {
     try {
-        console.log("Check req update body >>> ", req.body);
 
         const newExe = await Exercise.findByIdAndUpdate(req.body._id, req.body)
 
@@ -55,7 +54,6 @@ export const updateExercise = async (req, res) => {
 
 export const createNewExercise = async (req, res) => {
     try {
-        console.log("Check req body >>> ", req.body);
 
         const newExe = await Exercise.create(req.body)
 
@@ -91,8 +89,6 @@ export const getAllExercisesByBodyPart = async (req, res) => {
 export const getAllExercisesBySearchQueryName = async (req, res) => {
     try {
         const searchQueryName = req.params.searchQueryName || "";
-        console.log("searchQueryName >>> ", searchQueryName);
-
 
         const bodyParts = req.query.bodyParts ? JSON.parse(req.query.bodyParts) : [];
         const equipments = req.query.equipments ? JSON.parse(req.query.equipments) : [];

@@ -15,8 +15,6 @@ export const lockUser = async (req, res) => {
             { new: true } // Trả về tài liệu đã cập nhật
         );
 
-        console.log("Check updatedUser >>> ", updatedUser);
-
         res.status(200).json({ message: "Khóa tài khoản thành công", data: updatedUser });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -125,9 +123,6 @@ export const getCurrentUser = async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1]; // "Bearer <token>"
-
-        // console.log("Check token >>> ", token);
-
 
         if (!token) {
             return res.status(401).json({ message: 'Token không tồn tại' });

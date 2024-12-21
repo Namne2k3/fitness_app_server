@@ -75,6 +75,10 @@ export const getBlogById = async (req, res) => {
             .populate('medias')
             .populate('author')
 
+        if (!foundBlog) {
+            return res.status(404).json({ message: "Bài viết không tồn tại!" })
+        }
+
         res.status(200).json({ message: 'Get Detail Blog Successfully', data: foundBlog });
     } catch (error) {
         res.status(500).json({ message: 'An error occurred', error: error.message });
@@ -88,7 +92,6 @@ export const updateBlogById = async (req, res) => {
 
 
         const updatedBlog = await Blog.findByIdAndUpdate(id, feedBody, { new: true });
-        console.log("Check updatedBlog >>> ", updatedBlog);
 
         if (!updatedBlog) {
             return res.status(404).json({ message: 'Blog not found' });

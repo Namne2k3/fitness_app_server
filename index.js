@@ -62,7 +62,7 @@ app.use('/api/calendar', calendarRoutes);
 app.use('/api/foods', foodRoutes);
 
 let chatRooms = []
-let userSockets = {}
+export let userSockets = {}
 io.on('connection', (socket) => {
     socket.on('register', (userId) => {
         userSockets[userId] = socket.id;

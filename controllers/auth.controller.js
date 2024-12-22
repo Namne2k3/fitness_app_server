@@ -1,6 +1,7 @@
 import { User } from '../models/index.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
+import { userSockets } from '../index.js'
 
 export const signup = async (req, res) => {
     try {
@@ -26,6 +27,9 @@ export const login = async (req, res) => {
         if (!user) {
             return res.status(400).json({ message: 'Email chưa được đăng ký' });
         }
+        if (userSockets[user._id]) {
+            return res.status(400).json({ message: 'Đã có thiết bị đăng nhập. Vui lòng đăng xuất trên thiết bị khác!' });
+        }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
@@ -44,6 +48,12 @@ export const login = async (req, res) => {
     }
 }
 export const logout = async (req, res) => {
-    res.send('logout')
+    try {
+        const { _id } = req.user;
+        delete userSockets[_id]
+        res.status(200).json({ message: "Đăng xuất thành công!" });
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
 }
 

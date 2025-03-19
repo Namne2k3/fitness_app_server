@@ -22,6 +22,7 @@ import { fileURLToPath } from 'url';
 import { Server } from 'socket.io';
 import Message from './models/message.model.js';
 import Room from './models/room.model.js';
+import exp from 'constants';
 
 // Tạo __filename và __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -124,8 +125,11 @@ io.on('connection', (socket) => {
 });
 
 server.listen(PORT, async () => {
-    await connectDb();
-
-    // await connectDbMySql();
-    console.log(`Server is running on port ${PORT}`);
+    if (process.env.NODE_ENV !== 'test') {
+        server.listen(PORT, async () => {
+            await connectDb();
+            console.log(`Server is running on port ${PORT}`);
+        });
+    }
 });
+export default app;
